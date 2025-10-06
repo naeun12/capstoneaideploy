@@ -18,22 +18,33 @@ openai.api_type = "open_ai"
 openai.api_version = None
 
 # Connect to MySQL database
+@app.route("/test-db", methods=["GET"])
+def test_db():
+    try:
+        conn = get_db_connection()
+        conn.close()
+        return jsonify({"success": True, "message": "Database connection successful!"})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
 @app.route("/", methods=["GET"])
 def home():
     return "DormHub AI API is running!"
 
 def get_db_connection():
-     try:
+    try:
         conn = mysql.connector.connect(
             host=os.getenv("DB_HOST", "136.113.184.28"),
             user=os.getenv("DB_USER", "dormhub"),
             password=os.getenv("DB_PASSWORD", "dormH@b2025"),
             database=os.getenv("DB_NAME", "capstonedormhub")
         )
-        conn.close()
-        return jsonify({"success": True, "message": "Database connection successful!"})
+        return conn  # return the connection object
     except Exception as e:
-        return jsonify({"success": False, "message": str(e)})
+        # Log error and raise it to be handled in your Flask route
+        print("Database connection failed:", e)
+        raise
+
 
 
 # Clean code blocks or extra characters from OpenAI response
