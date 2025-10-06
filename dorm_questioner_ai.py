@@ -18,6 +18,10 @@ openai.api_type = "open_ai"
 openai.api_version = None
 
 # Connect to MySQL database
+@app.route("/", methods=["GET"])
+def home():
+    return "DormHub AI API is running!"
+
 def get_db_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST", "136.113.184.28"),
