@@ -20,11 +20,12 @@ openai.api_version = None
 # Connect to MySQL database
 def get_db_connection():
     return mysql.connector.connect(
-        host="136.113.184.28",
-        user="dormhub",
-        password="dormH@b2025",  # Put your DB password here
-        database="capstonedormhub"
+        host=os.getenv("DB_HOST", "136.113.184.28"),
+        user=os.getenv("DB_USER", "dormhub"),
+        password=os.getenv("DB_PASSWORD", "dormH@b2025"),
+        database=os.getenv("DB_NAME", "capstonedormhub")
     )
+
 
 # Clean code blocks or extra characters from OpenAI response
 def extract_json_from_response(text):
@@ -319,6 +320,6 @@ Images: {images if images else 'No images'}
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))  
+    app.run(host="0.0.0.0", port=port, debug=True)  
