@@ -23,12 +23,17 @@ def home():
     return "DormHub AI API is running!"
 
 def get_db_connection():
-    return mysql.connector.connect(
-        host=os.getenv("DB_HOST", "136.113.184.28"),
-        user=os.getenv("DB_USER", "dormhub"),
-        password=os.getenv("DB_PASSWORD", "dormH@b2025"),
-        database=os.getenv("DB_NAME", "capstonedormhub")
-    )
+     try:
+        conn = mysql.connector.connect(
+            host=os.getenv("DB_HOST", "136.113.184.28"),
+            user=os.getenv("DB_USER", "dormhub"),
+            password=os.getenv("DB_PASSWORD", "dormH@b2025"),
+            database=os.getenv("DB_NAME", "capstonedormhub")
+        )
+        conn.close()
+        return jsonify({"success": True, "message": "Database connection successful!"})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
 
 
 # Clean code blocks or extra characters from OpenAI response
